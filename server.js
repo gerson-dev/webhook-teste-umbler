@@ -6,7 +6,11 @@ var app = express();
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
-
+let bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 
 
 
@@ -16,6 +20,41 @@ app.get('/', function(request, response) {
   response.send("Teste Plataforma Umbler");
 });
 
+
+const mysql = require("mysql");
+const MYSQL_HOST = process.env.MYSQL_HOST;
+const MYSQL_USER = process.env.MYSQL_USER;
+const MYSQL_PASS = process.env.MYSQL_PASS;
+const MYSQL_DB = process.env.MYSQL_DB;
+
+app.post("/vitale",function(request,response){
+
+  let intentName = request.body.queryResult.intent.displayName;
+
+  if (intentName === "Servicos"){
+
+    let nome = request.body.queryResult.parameters['nome-completo'];
+    let fone = request.body.queryResult.parameters['telefone'];
+
+    let sql_query = "insert into cliente values ('"+nome+"','"+fone+"')";
+
+    let connection = mysql.createConnection({
+        host: MYSQL_HOST,
+        user: MYSQL_USER,
+        password: MYSQL_PASS,
+        database: MYSQL_DB
+    });
+
+    connection.connect()
+
+        connection.query(sql_query, function(error, results, fields){
+            if (error) throw error;
+            connection.end()
+            
+        })
+
+
+})
 
 
 
