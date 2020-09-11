@@ -33,7 +33,7 @@ app.post("/salao",function(request,response){
 
   if (intentName === "agendamento"){
 
-    let nome = request.body.queryResult.parameters['nome-completo2'];
+    let nomecompleto = request.body.queryResult.parameters['nome-completo2'];
     let fone = request.body.queryResult.parameters['telefone'];
 
     let sql_query = "insert into cliente values ('"+nome+"','"+fone+"')";
@@ -52,6 +52,9 @@ app.post("/salao",function(request,response){
             connection.end()
             
         })
+  }
+
+    
 
 
 }
