@@ -27,13 +27,13 @@ const MYSQL_USER = process.env.MYSQL_USER;
 const MYSQL_PASS = process.env.MYSQL_PASS;
 const MYSQL_DB = process.env.MYSQL_DB;
 
-app.post("/vitale",function(request,response){
+app.post("/salao",function(request,response){
 
   let intentName = request.body.queryResult.intent.displayName;
 
-  if (intentName === "Servicos"){
+  if (intentName === "agendamento"){
 
-    let nome = request.body.queryResult.parameters['nome-completo'];
+    let nome = request.body.queryResult.parameters['nome-completo2'];
     let fone = request.body.queryResult.parameters['telefone'];
 
     let sql_query = "insert into cliente values ('"+nome+"','"+fone+"')";
