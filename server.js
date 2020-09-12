@@ -50,6 +50,7 @@ app.post("/salao",function(request,response){
         connection.query(sql_query, function(error, results, fields){
             if (error) throw error;
             connection.end()
+            response.json({"fulfillmentText":"Seus dados foram salvos com sucesso, quer agendar agora ?"})
             
         })
   }
