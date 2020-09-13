@@ -45,40 +45,36 @@ const serviceAccountAuth = new google.auth.JWT({
 
 const calendar = google.calendar('v3');
 
+const mysql = require("mysql");
+const MYSQL_HOST = process.env.MYSQL_HOST;
+const MYSQL_USER = process.env.MYSQL_USER;
+const MYSQL_PASS = process.env.MYSQL_PASS;
+const MYSQL_DB = process.env.MYSQL_DB;
 
 
-
-app.post("/salao",function(request,response){
+app.post("/teste",function (request,response){
 
   let intentName = request.body.queryResult.intent.displayName;
 
   if (intentName === "agendamento"){
 
-    let cliente = request.body.queryResult.parameters['nome-completo2'];
+    let nome = request.body.queryResult.parameters['nome-completo'];
+    let fone = request.body.queryResult.parameters['telefone'];
 
-    let profissional = request.body.queryResult.parameters['profissional'];
-    let data    = request.body.queryResult.parameters['data'];
-    let hora    = request.body.queryResult.parameters['hora'];
+    let sql_query = "insert into clientes values ('"+nome+"','"+fone+"')";
 
+    let connection = mysql.createConnection({
+        host: MYSQL_HOST,
+        user: MYSQL_USER,
+        password: MYSQL_PASS,
+        database: MYSQL_DB
+    });
+    connection.connect()
 
-    const dateTimeStart = new Date(Date.parse(data.split('T')[0] + 'T' + hora.split('T')[1].split('-')[0] + timeZoneOffset));
-        const dateTimeEnd = new Date(new Date(dateTimeStart).setHours(dateTimeStart.getHours() + 1));
-        const agendamentoString = formatData(new Date(data.split('T')[0]))+ " as "+hora.split('T')[1].split('-')[0];
-
-    
-        return criarEventoCalendario(dateTimeStart, dateTimeEnd, profissional,cliente).then(() => {
-          let mensagem = `Excelente, seu serviço esta agendado para ${agendamentoString} `;
-          console.log(mensagem);
-          response.json({"fulfillmentText":mensagem});
-        }).catch(() => {
-          let mensagem = `Desculpe, não temos mais vaga para ${agendamentoString}.`;
-          console.log(mensagem);
-          response.json({"fulfillmentText":mensagem});
-        });
-
-  }
-
-    
+    connection.query(sql_query, function(error, results, fields){
+        if (error) throw error;
+        connection.end()
+      })  
 
 
 })
