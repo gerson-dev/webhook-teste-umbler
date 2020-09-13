@@ -71,13 +71,14 @@ app.post("/petshop",function (request,response){
     });
     connection.connect()
 
-    connection.query(sql_query, function(error, results, fields){
-        if (error) throw error;
-        connection.end()
-      })  
+        connection.query(sql_query, function(error, results, fields){
+            if (error) throw error;
+            connection.end()
+            response.json({"fulfillmentText":"Seus dados foram salvos com sucesso, quer agendar agora ?"})
+        })
 
 
-})
+}
 
 function criarEventoCalendario(dateTimeStart, dateTimeEnd, servico,tipo,cliente) {
   return new Promise((resolve, reject) => {
