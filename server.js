@@ -52,14 +52,14 @@ const MYSQL_PASS = process.env.MYSQL_PASS;
 const MYSQL_DB = process.env.MYSQL_DB;
 
 
-app.post("/teste",function (request,response){
+app.post("/petshop",function (request,response){
 
   let intentName = request.body.queryResult.intent.displayName;
 
   if (intentName === "agendamento"){
 
-    let nome = request.body.queryResult.parameters['nome-completo'];
-    let fone = request.body.queryResult.parameters['telefone'];
+    let nome = request.body.queryResult.parameters['nome-cliente'];
+    let fone = request.body.queryResult.parameters['fone-cliente'];
 
     let sql_query = "insert into clientes values ('"+nome+"','"+fone+"')";
 
